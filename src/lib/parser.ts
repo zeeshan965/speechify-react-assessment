@@ -17,7 +17,22 @@ const IGNORE_LIST = [
   "SCRIPT",
 ];
 
+const hasNonEmptyTextNode = (element: HTMLElement): boolean => {
+  for (const child of element.childNodes) {
+    if (child.nodeType === Node.TEXT_NODE && child.nodeValue.trim() !== '') {
+      return true;
+    }
+  }
+  return false;
+}
 
+const isIgnoredElement = (element: HTMLElement): boolean => {
+  return IGNORE_LIST.includes(element.tagName.toUpperCase());
+}
+
+const isOnlyChild = (element: HTMLElement): boolean => {
+  return element.parentElement && element.parentElement.children.length === 1;
+}
 
 /**
  *  **TBD:** Implement a function that returns all the top level readable elements on the page, keeping in mind the ignore list.
@@ -28,5 +43,18 @@ const IGNORE_LIST = [
  *      For example: <div><blockquote>Some text here</blockquote></div>. div is the top level readable element and not blockquote
  */
 export function getTopLevelReadableElementsOnPage(): HTMLElement[] {
+  const allElements: HTMLCollectionOf<Element> = document.body.getElementsByTagName('*');
+  const topLevelElements: HTMLElement[] = [];
 
+  for (const element: HTMLElement of allElements) {
+    if (
+        hasNonEmptyTextNode(element) &&
+        !isIgnoredElement(element) &&
+        !isOnlyChild(element)
+    ) {
+      topLevelElements.push(element);
+    }
+  }
+
+  return topLevelElements;
 }

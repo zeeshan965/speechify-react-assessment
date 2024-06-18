@@ -1,4 +1,8 @@
 // This is a simple play button SVG that you can use in your hover player
+import {useRef} from "react";
+import {useHoveredParagraphCoordinate} from "./hook.ts";
+import {getTopLevelReadableElementsOnPage} from "./parser.ts";
+
 const PlayButton = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     id="play-button"
@@ -27,4 +31,39 @@ const PlayButton = (props: React.SVGProps<SVGSVGElement>) => (
  * The hover player should contain a play button that when clicked, should play the text of the paragraph
  * This component should make use of the useHoveredParagraphCoordinate hook to get information about the hovered paragraph
  */
-export default function HoverPlayer() {}
+export default function HoverPlayer() {
+    const parsedElements = getTopLevelReadableElementsOnPage();
+    const hoveredParagraph = useHoveredParagraphCoordinate(parsedElements);
+
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    const handlePlayText = () => {
+        if (hoveredParagraph?.element) {
+            const text = hoveredParagraph.element.innerText;
+            const utterance = new SpeechSynthesisUtterance(text);
+            console.log(utterance)
+            window.speechSynthesis.speak(utterance);
+        }
+    };
+
+    if (!hoveredParagraph) {
+        return null;
+    }
+
+    const { top, left, heightOfFirstLine } = hoveredParagraph;
+
+    return (
+        <div
+            style={{
+                position: 'absolute',
+                top: `${top - 12}px`,
+                left: `${left - 10}px`, // Adjust position as needed
+                transform: `translateY(${heightOfFirstLine / 2}px)`,
+                zIndex: 1000,
+            }}
+        >
+            <PlayButton onClick={handlePlayText} />
+        </div>
+    );
+
+}

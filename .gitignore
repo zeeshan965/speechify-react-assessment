@@ -27,3 +27,7 @@ test-results/
 
 # coverage files
 *.xml
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
