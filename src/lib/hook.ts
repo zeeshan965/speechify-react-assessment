@@ -37,15 +37,14 @@ export function isPointInsideElement(
  */
 export function getLineHeightOfFirstLine(element: HTMLElement): number {
   const computedStyle = window.getComputedStyle(element);
-  const lineHeight = parseFloat(computedStyle.lineHeight);
+  const lineHeight = computedStyle.lineHeight;
+  //const lineHeight = parseFloat(computedStyle.lineHeight);
 
-  // If line-height is 'normal', calculate it manually
-  if (isNaN(lineHeight)) {
-    const fontSize = parseFloat(computedStyle.fontSize);
-    return fontSize * 1.2; // A common heuristic for normal line height
+  if (lineHeight.endsWith("px")) {
+    return parseFloat(lineHeight);
   }
-
-  return lineHeight;
+  const fontSize = parseFloat(computedStyle.fontSize);
+  return fontSize * parseFloat(lineHeight);
 }
 
 export type HoveredElementInfo = {
