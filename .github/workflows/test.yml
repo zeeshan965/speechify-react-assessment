@@ -1,0 +1,68 @@
+name: test
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: write
+  checks: write
+
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "21"
+          cache: "npm"
+          cache-dependency-path: "package-lock.json"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Run integration tests
+        run: npm run playwright
+
+      - name: Report test results
+        uses: mikepenz/action-junit-report@v2
+        if: success() || failure()
+        with:
+          report_paths: "**/test-results.xml"
+          check_name: "Integration Tests Report"
+
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "21"
+          cache: "npm"
+          cache-dependency-path: "package-lock.json"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Run unit tests
+        run: npm run test
+
+      - name: Report test results
+        uses: mikepenz/action-junit-report@v2
+        if: success() || failure()
+        with:
+          report_paths: "**/test-results.xml"
+          check_name: "Unit Tests Report"

@@ -1,0 +1,39 @@
+{
+  "name": "speechify-web-assessment",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "farm start",
+    "start": "farm start",
+    "build": "farm build",
+    "preview": "farm preview",
+    "clean": "farm clean",
+    "test": "vitest",
+    "playwright": "playwright test"
+  },
+  "dependencies": {
+    "clsx": "^1.2.1",
+    "playwright": "^1.43.1",
+    "react": "18",
+    "react-dom": "18"
+  },
+  "devDependencies": {
+    "@farmfe/cli": "^1.0.0",
+    "@farmfe/core": "^1.0.16",
+    "@farmfe/plugin-react": "^1.0.1",
+    "@playwright/test": "^1.43.1",
+    "@testing-library/jest-dom": "^6.4.5",
+    "@testing-library/react": "^15.0.6",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/node": "^20.12.9",
+    "@types/react": "18",
+    "@types/react-dom": "18",
+    "@vitest/browser": "^1.5.2",
+    "@vitest/ui": "^1.6.0",
+    "core-js": "^3.36.1",
+    "jsdom": "^24.0.0",
+    "react-refresh": "^0.14.0",
+    "vitest": "^1.6.0",
+    "vitest-github-actions-reporter": "^0.11.1"
+  }
+}
